@@ -31,12 +31,18 @@ public class PlayerMove : MonoBehaviour
         movement.Set(h, 0f, v);
         movement = movement.normalized * speed * Time.deltaTime;
 
-        if (Input.GetButtonDown("Jump"))
+        if (Input.GetButtonDown("Jump") && IsGrounded())
         {
             movement.y = 5f;
         }
 
         playerRigidbody.MovePosition(transform.position + movement);
+    }
+
+    bool IsGrounded()
+    {
+        RaycastHit hitInfo;
+        return Physics.Raycast(transform.position, Vector3.down, out hitInfo, 0.5f, floorMask);
     }
 
     void Turning()
