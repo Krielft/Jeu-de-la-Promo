@@ -30,6 +30,12 @@ public class PlayerMove : MonoBehaviour
     {
         movement.Set(h, 0f, v);
         movement = movement.normalized * speed * Time.deltaTime;
+
+        if (Input.GetButtonDown("Jump"))
+        {
+            movement.y = 5f;
+        }
+
         playerRigidbody.MovePosition(transform.position + movement);
     }
 
