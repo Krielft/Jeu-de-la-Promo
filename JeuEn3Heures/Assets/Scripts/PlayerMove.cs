@@ -4,60 +4,28 @@ using UnityEngine;
 
 public class PlayerMove : MonoBehaviour
 {
-    public float speed = 6f;
+    public float speed = 10.0f;
 
-    Vector3 movement;
-    Rigidbody2D playerRigidbody;
-    int floorMask;
-    float camRayLength = 100f;
+    private Rigidbody2D rigidbody2D;
 
-    private void Awake()
+    private void Start()
     {
-        floorMask = LayerMask.GetMask("Floor");
-        playerRigidbody = GetComponent<Rigidbody2D>();
+        rigidbody2D = GetComponent<Rigidbody2D>();
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
-        float h = Input.GetAxisRaw("Horizontal");
-        float v = Input.GetAxisRaw("Vertical");
+        float horizontal = Input.GetAxis("Horizontal");
+        Vector2 position = rigidbody2D.position;
+        position.x = position.x + speed * horizontal * Time.deltaTime;
+        rigidbody2D.MovePosition(position);
 
-        Move(h, v);
-        Turning();
-    }
-
-    void Move(float h, float v)
-    {
-        movement.Set(h, 0f, v);
-        movement = movement.normalized * speed * Time.deltaTime;
-
-        if (Input.GetButtonDown("Jump") && IsGrounded())
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            movement.y = 5f;
-        }
-
-        playerRigidbody.MovePosition(transform.position + movement);
-    }
-
-    bool IsGrounded()
-    {
-        RaycastHit hitInfo;
-        return Physics.Raycast(transform.position, Vector3.down, out hitInfo, 0.5f, floorMask);
-    }
-
-    void Turning()
-    {
-        Ray camRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit floorHit;
-
-        if (Physics.Raycast(camRay, out floorHit, camRayLength, floorMask))
-        {
-            Vector3 playerToMouse = floorHit.point - transform.position;
-            playerToMouse.y = 0f;
-
-            Quaternion newRotation = Quaternion.LookRotation(playerToMouse);
-            playerRigidbody.MoveRotation(newRotation);
+            rigidbody2D.AddForce(new Vector2(0, 5), ForceMode2D.Impulse);
         }
     }
+
+
 
 }
