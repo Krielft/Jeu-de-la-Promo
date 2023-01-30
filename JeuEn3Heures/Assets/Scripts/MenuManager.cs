@@ -8,6 +8,8 @@ public class MenuManager : MonoBehaviour
 {
     public AudioSource audioSource;
     public AudioClip ClickedButton;
+    public GameObject conceptPanel;
+    public GameObject creditsPanel;
     public string Url;
     public void ButtonClick(string s)
     {
@@ -15,6 +17,16 @@ public class MenuManager : MonoBehaviour
         if (s == "play")
         {
             SceneManager.LoadScene("Level1");
+        }
+        if(s == "credits")
+        {
+            conceptPanel.SetActive(false);
+            creditsPanel.SetActive(true);
+        }        
+        if(s == "returncredits")
+        {
+            conceptPanel.SetActive(true);
+            creditsPanel.SetActive(false);
         }
     }
     public void Open()
